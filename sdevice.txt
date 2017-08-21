@@ -1,0 +1,207 @@
+Device n_diode
+{
+    Electrode
+    {
+        {Name="con_str_t1" voltage=0.0}
+        {Name="con_str_b1" voltage=0.0}
+        {Name="con_str_t2" voltage=0.0}
+        {Name="con_str_b2" voltage=0.0}
+        {Name="con_back"   voltage=0.0}
+    }
+    File
+    {
+*        Parameter = "newmodels.par"
+        Grid="n@node|-1@_msh.tdr"
+        Current="strip_des.plt"
+        Plot="strip_des.dat"
+    }
+    Physics
+    {
+        Fermi
+        Temperature = 293
+        Mobility(
+	  DopingDependence 
+	  eHighFieldSaturation 
+	  hHighFieldSaturation 
+	  CarrierCarrierScattering(ConwellWeisskopf)
+	)
+        Recombination(
+	  CDL 
+	  SRH(
+	    DopingDependence 
+	    TempDependence
+	    ElectricField(LifeTime=Hurkx)
+	  ) 
+	  Auger 
+	  eAvalanche(vanOverstraeten Eparallel) 
+	  hAvalanche(vanOverstraeten Eparallel)
+	)
+        EffectiveIntrinsicDensity (BandGapNarrowining(Slotboom))
+*        HeavyIon(Direction=(0,1) Location=(@incident_x@,0) Time=1.e-13 Length=[0 0.1 203 203.1] wt_hi=[0.01 0.01 0.01 0.01] LET_f=[0 1.282e-5 1.282e-5 0] Gaussian PicoCoulomb)
+	HeavyIon(
+		Direction = (0,1)
+		Location = (@incident_x@,0)
+		Time = 1e-9
+		Length = 460
+		Wt_hi = 1.0
+		LET_f = 1.282e-5
+		Gaussian PicoCoulomb
+		)
+
+    }
+}
+
+System
+{
+    n_diode nnp(
+      "con_back"  =bg 
+      "con_str_t1"=s1_top 
+      "con_str_b1"=s1_bot 
+      "con_str_t2"=s2_top 
+      "con_str_b2"=s2_bot)
+    Vsource_pset v (bg 0) {dc = 0}
+    Resistor_pset r1_top (s1_top 0) {resistance = 1000000}
+    Resistor_pset r1_bot (s1_bot 0) {resistance = 1000000}
+    Resistor_pset r2_top (s2_top 0) {resistance = 1000000}
+    Resistor_pset r2_bot (s2_bot 0) {resistance = 1000000}
+}
+File
+{
+    Output="strip_des.log"
+}
+Plot
+{
+    eCurrent/Vector hCurrent/Vector Current/vector
+    eDensity hDensity
+    ElectricField ElectricField/Vector
+    eEparallel hEparallel
+    Potential SpaceCharge
+    Doping DonorConcentration AcceptorConcentration
+    Auger eAvalanche hAvalanche AvalancheGeneration
+    eMobility hMobility
+    SRHRecombination
+    BeamGeneration
+    HeavyIonCharge HeavyIonGeneration
+    eAlphaAvalanche hAlphaAvalanche
+    CDL CDL1 CDL2 CDL3
+    eTrappedCharge hTrappedCharge
+    eInterfaceTrappedCharge hInterfaceTrappedCharge
+    eGapStatesRecombination hGapStatesRecombination
+
+}
+Math
+{
+    Method= Pardiso
+    Number_of_Threads=maximum
+    Extrapolate
+    Derivatives
+    RelErrControl
+    Digits=4
+    Notdamped=50
+    Iterations=6
+    RecBoxIntegr(5e-3 50 5000)
+    Transient = BE
+}
+Solve
+{
+    Coupled (iterations=100){Poisson}
+    Coupled (iterations=100){Poisson Electron Hole Circuit} 
+    NewCurrentPrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_-100V_"
+    QuasiStationary(
+	InitialStep=1e-7 
+	Minstep=1e-10
+	MaxStep=0.01
+	Increment=1.41
+	Decrement=4 
+	Goal{
+	  Parameter=v.dc
+	  voltage=-100
+	}
+    )
+{
+        Coupled(iterations=20){Poisson Electron Hole Circuit}
+        Plot (FilePrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_-100V_" Time = (Range = (0.0 1) Intervals = 10) NoOverwrite)
+    }
+    #Plot(NoOverwrite)
+    Save(FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/voltageramp-100V_")
+    
+    NewCurrentPrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_trans_-100V_"
+   
+      Transient(InitialTime=1.e-13 FinalTime=5.e-9 InitialStep = 1.e-13 MinStep=1e-19 MaxStep=250e-12 Increment = 1.41){
+      Coupled{Poisson Electron Hole Circuit}
+      Plot (FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/transient_-100V_" Time = (range = (1.e-13 1.e-10) intervals=3 decade; range = (1.e-10 1.e-9) intervals=10; range = (1.e-9 5.e-9) intervals=20) NoOverwrite)      
+    }
+    
+    
+   Load(FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/voltageramp-100V_")
+   
+
+
+ *ramp -300    
+NewCurrentPrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_-300V_"
+  QuasiStationary(
+ 	InitialStep=1e-7 
+	Minstep=1e-10
+	MaxStep=0.01
+	Increment=1.41
+	Decrement=4 
+	Goal{
+	  Parameter=v.dc
+	  voltage=-300
+	}
+    )
+{
+        Coupled(iterations=20){Poisson Electron Hole Circuit}
+        Plot (FilePrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_-300V_" Time = (Range = (0.0 1) Intervals = 10) NoOverwrite)
+    }
+    #Plot(NoOverwrite)
+    Save(FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/voltageramp-300V_")
+    
+    NewCurrentPrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_trans_-300V_"
+    
+      Transient(InitialTime=1.e-13 FinalTime=5.e-9 InitialStep = 1.e-13 MinStep = 1e-19 MaxStep = 250e-12 Increment = 1.41){    
+      Coupled{Poisson Electron Hole Circuit}
+      Plot (FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/transient_-300V_" Time = (range = (1.e-13 1.e-10) intervals=3 decade; range = (1.e-10 1.e-9) intervals=10; range = (1.e-9 5.e-9) intervals=20) NoOverwrite)      
+    }
+    
+    
+    Load(FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/voltageramp-300V_")
+    
+                
+*ramp -500    
+    NewCurrentPrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_-500V_"
+    QuasiStationary(
+	InitialStep=1e-7 
+	Minstep=1e-10
+	MaxStep=0.01
+	Increment=1.41
+	Decrement=4 
+	Goal{
+	  Parameter=v.dc
+	  voltage=-500
+	}
+    )
+{
+        Coupled(iterations=20){Poisson Electron Hole Circuit}
+        Plot (FilePrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_-500V_" Time = (Range = (0.0 1) Intervals = 10) NoOverwrite)
+    }
+    #Plot(NoOverwrite)
+    Save(FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/voltageramp-500V_")
+    
+    NewCurrentPrefix = "./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/strip_trans_-500V_"
+     
+      Transient(InitialTime=1.e-13 FinalTime=5.e-9 InitialStep = 1.e-13 MinStep = 1e-19 MaxStep = 250e-12 Increment = 1.41){    
+      Coupled{Poisson Electron Hole Circuit}
+      Plot (FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/transient_-500V_" Time = (range = (1.e-13 1.e-10) intervals=3 decade; range = (1.e-10 1.e-9) intervals=10; range = (1.e-9 5.e-9) intervals=20) NoOverwrite)      
+    }
+    
+    
+*    Load(FilePrefix="./output/nnp/2str_5lay_@imp_depth_z@-@imp_dist_z@-@imp_sigma@-@imp_width@-@incident_x@/voltageramp-500V_")  
+    
+} 
+
+
+
+
+
+

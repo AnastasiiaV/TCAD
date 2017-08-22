@@ -88,7 +88,8 @@
 	(begin
 		(display i)
 			(sdegeo:create-polygon
-				(list        (position (- (* i pitch) half_elec_width ) 0 0)
+			(list        
+					(position (- (* i pitch) half_elec_width ) 0 0)
 	       				(position (+ (* i pitch) half_elec_width ) 0 0)
 	       				(position (+ (* i pitch) half_elec_width ) 0.4 0)
 	       				(position (+ (* i pitch) half_strip_width ) 0.4 0)	     
@@ -97,7 +98,7 @@
 					(position (- (* i pitch) half_strip_width ) 0.4 0)
 					(position (- (* i pitch) half_elec_width ) 0.4 0)
 	       				(position (- (* i pitch) half_elec_width ) 0 0)	       				
-				)
+					)
 			"Aluminum" "elec_"
 			)
 
@@ -122,32 +123,39 @@
 (sdegeo:create-rectangle (position  0   (+ z0 (* 2 imp_dist_z)) 0) (position width_sensor_total (+ thick_sensor_total 1) 0) "Silicon" "p-bulk")
 (sdegeo:create-rectangle (position  0  (+ thick_sensor_total 1) 0) (position  width_sensor_total (+ thick_sensor_total 2) 0) "Aluminum" "backplane")
 
+(sdegeo:insert-vertex (position     2 1 0))
+(sdegeo:insert-vertex (position    half_strip_width 1 0))
+(sdegeo:insert-vertex (position    (+ half_strip_width spray_l) 1 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width spray_l) strip_width) 1 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 2 spray_l)) strip_width)  1 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 2 spray_l)) (* 2 strip_width)) 1 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 3 spray_l)) (* 2 strip_width)) 1 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 3 spray_l)) (* 3 strip_width))   1 0))
+(sdegeo:insert-vertex (position    (- width_sensor_total half_strip_width) 1 0))
+(sdegeo:insert-vertex (position  (- width_sensor_total 2) 1 0))
 
-;(sdegeo:insert-vertex (position    (- strip_width 2)                         1 0))
-;(sdegeo:insert-vertex (position      middle                            1 0))
-;(sdegeo:insert-vertex (position    (- pitch strip_width)               1 0))
-;(sdegeo:insert-vertex (position  (+ (- strip_width 2) pitch )                1 0))
-;
-;
-;(sdegeo:insert-vertex (position    (- strip_width 2)                         2 0))
-;(sdegeo:insert-vertex (position      middle                            2 0))
-;(sdegeo:insert-vertex (position    (- width_sensor_total strip_width)               2 0))
-;(sdegeo:insert-vertex (position   (+ (- strip_width 2) pitch )                2 0))
+(sdegeo:insert-vertex (position     2 2 0))
+(sdegeo:insert-vertex (position    half_strip_width 2 0))
+(sdegeo:insert-vertex (position    (+ half_strip_width spray_l) 2 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width spray_l) strip_width) 2 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 2 spray_l)) strip_width)  2 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 2 spray_l)) (* 2 strip_width)) 2 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 3 spray_l)) (* 2 strip_width)) 2 0))
+(sdegeo:insert-vertex (position    (+ (+ half_strip_width (* 3 spray_l)) (* 3 strip_width)) 2 0))
+(sdegeo:insert-vertex (position    (- width_sensor_total half_strip_width) 2 0))
+(sdegeo:insert-vertex (position  (- width_sensor_total 2) 2 0))
 
-;;#----------Define Contacts
-;(display "define contacts")
-;(sdegeo:define-contact-set "con_back" 4 (color:rgb 1 1 1 ) "##" )
 
-;(sdegeo:define-contact-set "con_str_t1" 4 (color:rgb 1 0 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_b1" 4 (color:rgb 1 1 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_t2" 4 (color:rgb 1 0 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_b2" 4 (color:rgb 1 1 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_t3" 4 (color:rgb 1 0 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_b3" 4 (color:rgb 1 1 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_t4" 4 (color:rgb 1 0 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_b4" 4 (color:rgb 1 1 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_t5" 4 (color:rgb 1 0 0 ) "##" )
-;(sdegeo:define-contact-set "con_str_b5" 4 (color:rgb 1 1 0 ) "##" )
+;#----------Define Contacts
+(display "define contacts")
+(sdegeo:define-contact-set "con_back" 4 (color:rgb 1 1 1 ) "##" )
+
+
+(sdegeo:define-contact-set "con_str_b1" 4 (color:rgb 1 1 0 ) "##" )
+(sdegeo:define-contact-set "con_str_b2" 4 (color:rgb 1 1 0 ) "##" )
+(sdegeo:define-contact-set "con_str_b3" 4 (color:rgb 1 1 0 ) "##" )
+(sdegeo:define-contact-set "con_str_b4" 4 (color:rgb 1 1 0 ) "##" )
+(sdegeo:define-contact-set "con_str_b5" 4 (color:rgb 1 1 0 ) "##" )
 
 
 ;;#----------Define Ref/Eval Windows
@@ -156,10 +164,7 @@
 (sdedr:define-refeval-window "dope_p++" "Rectangle" (position  0 (+ thick_sensor_total 1) 0) (position width_sensor_total (+ thick_sensor_total 2) 0))
 ; p-spray
 (display "drowing p-spray")
-;(sdedr:define-refeval-window "dope_p+_1" "Rectangle" (position  (+ 2 half_strip_width) 1 0) (position (+ (+ 2 half_strip_width) Rspray_l) 1.5 0))
-;(sdedr:define-refeval-window "dope_p+_2" "Rectangle" (position  (+ (+ 2 half_strip_width) (+ spray_l (+ strip_width 2))) 1 0) (position (+ (+ (+ 2 half_strip_width) (+ spray_l (+ strip_width 2))) Rspray_l) 1.5 0))
-;(sdedr:define-refeval-window "dope_p+_3" "Rectangle" (position  (+ (+ (+ 2 half_strip_width) (* 2 spray_l)) (* 2 strip_width) ) 1 0) (position (+ (+ (+ (+ (+ 2 half_strip_width) (+ spray_l (+ strip_width 1))) spray_l) (+ strip_width 2) ) Rspray_l) 1.5 0))
-;(sdedr:define-refeval-window "dope_p+_4" "Rectangle" (position  (- width_sensor_total (+ Rspray_l half_strip_width)) 1 0) (position (- width_sensor_total (- half_strip_width 2)) 1.5 0))
+
 
 (do ((i 0 (+ i 1))) ((= i (- nstrips 1) ))
 	(begin
@@ -189,107 +194,21 @@
 )
 
 
-; try centralised geometry starting from middle
 
-; layer 1 (different from rest)
-;(define lay1_imp_width_half 4)
-;(set! tempstring2 "CG_1_1")
-;(display tempstring2)
-;(sdedr:define-refeval-window tempstring2 "Rectangle" 
- ;  (position  (- middle lay1_imp_width_half)       5               0) 
-  ; (position  (+ middle lay1_imp_width_half)   (+  5  imp_depth_z) 0)
-;)
-
-; n-layer 2 
-;(define lay2_imp_width_half 2)
-;(set! tempstring2 "CG_2_3")
-;(display tempstring2)
-;(sdedr:define-refeval-window tempstring2 "Rectangle" 
-;   (position  (- middle lay2_imp_width_half)       (+ z0 (* 0 imp_dist_z))              0) 
-;   (position  (+ middle lay2_imp_width_half)   (+  (+ z0 (* 0 imp_dist_z)) imp_depth_z) 0)
-;)
-
-; n-layer 3 
-;(define lay3_imp_width_half 4)
-;(set! tempstring2 "CG_3_3")
-;(display tempstring2)
-;(sdedr:define-refeval-window tempstring2 "Rectangle" 
-;   (position  (- middle lay3_imp_width_half)       (+ z0 (* 1 imp_dist_z))              0) 
-;   (position  (+ middle lay3_imp_width_half)   (+  (+ z0 (* 1 imp_dist_z)) imp_depth_z) 0)
-;)
-
-; n-layer 4 
-;(define lay4_imp_width_half 6)
-;(set! tempstring2 "CG_4_3")
-;(display tempstring2)
-;(sdedr:define-refeval-window tempstring2 "Rectangle" 
-;   (position  (- middle lay4_imp_width_half)       (+ z0 (* 2 imp_dist_z))              0) 
-;   (position  (+ middle lay4_imp_width_half)   (+  (+ z0 (* 2 imp_dist_z)) imp_depth_z) 0)
-
-; n-layer 5 
-;(define lay4_imp_width_half 8)
-;(set! tempstring2 "CG_5_3")
-;(display tempstring2)
-;(sdedr:define-refeval-window tempstring2 "Rectangle" 
-;   (position  (- middle lay4_imp_width_half)       (+ z0 (* 3 imp_dist_z))              0) 
-;   (position  (+ middle lay4_imp_width_half)   (+  (+ z0 (* 3 imp_dist_z)) imp_depth_z) 0)
-;)
-
-; layer 2-4 left side first (i=1)
-;(display "2, 3, 4, ...") (newline)
-;(do ((j 2 (+ j 1))) ((> j nlayers))
-;	(begin
-;		(display j)
-;
-;
-;		      		(display "i = 1")
-;		   		(set! tempstring1 "CG_")
-;				(set! tempstring2 (string-append tempstring1 (number->string j)))
-;		                (set! tempstring2 (string-append tempstring2 "_1"))
-;		                (display tempstring2)
-;		                (sdedr:define-refeval-window tempstring2 "Rectangle" 
-;		                  (position  (- middle (+ (+ (* (- j 2) 3) 4) imp_width))    (+ z0 (* (- j 2) imp_dist_z))  0) 
-;		                  (position  (- middle    (+ (* (- j 2) 3) 4)           ) (+ (+ z0 (* (- j 2) imp_dist_z)) imp_depth_z) 0)
-;		                )
-;		      
-;
-;
-;	)
-;)
-;
-; layer 2-4 right side (i=2)
-;(display "2, 3, 4, ...") (newline)
-;(do ((j 2 (+ j 1))) ((> j nlayers))
-;	(begin
-;		(display j)
-;
-;
-;		      		(display "i = 2")
-;		   		(set! tempstring1 "CG_")
-;				(set! tempstring2 (string-append tempstring1 (number->string j)))
-;		                (set! tempstring2 (string-append tempstring2 "_2"))
-;		                (display tempstring2)
-;		                (sdedr:define-refeval-window tempstring2 "Rectangle" 
-;		                  (position  (+ middle    (+ (* (- j 2) 3) 4)           )    (+ z0 (* (- j 2) imp_dist_z))  0) 
-;		                  (position  (+ middle (+ (+ (* (- j 2) 3) 4) imp_width)) (+ (+ z0 (* (- j 2) imp_dist_z)) imp_depth_z) 0)
-;		                )
-;		      
-;
-;
-;	)
-;)
 ;;#----------Set Contacts
-;(sdegeo:set-current-contact-set "con_back")
-;(sdegeo:define-2d-contact (list (car (find-edge-id (position middle    (+ thick_sensor_total 2)  0)))) "con_back")
+(sdegeo:set-current-contact-set "con_back")
+(sdegeo:define-2d-contact (list (car (find-edge-id (position middle    (+ thick_sensor_total 2)  0)))) "con_back")
 
-;(sdegeo:set-current-contact-set "con_str_t1")
-;(sdegeo:define-2d-contact (list (car (find-edge-id (position middle_1l  0                        0)))) "con_str_t1")
-;(sdegeo:set-current-contact-set "con_str_b1")
-;(sdegeo:define-2d-contact (list (car (find-edge-id (position middle_1l  1                        0)))) "con_str_b1")
-;(sdegeo:set-current-contact-set "con_str_t2")
-;(sdegeo:define-2d-contact (list (car (find-edge-id (position middle_1r  0                        0)))) "con_str_t2")
-;(sdegeo:set-current-contact-set "con_str_b2")
-;(sdegeo:define-2d-contact (list (car (find-edge-id (position middle_1r  1                        0)))) "con_str_b2")
+(sdegeo:set-current-contact-set "con_str_b1")
+(sdegeo:define-2d-contact (list (car (find-edge-id (position (/ half_strip_width 2) 1 0)))) "con_str_b1")
+(sdegeo:set-current-contact-set "con_str_b2")
+(sdegeo:define-2d-contact (list (car (find-edge-id (position pitch 1 0)))) "con_str_b2")
+(sdegeo:set-current-contact-set "con_str_b3")
+(sdegeo:define-2d-contact (list (car (find-edge-id (position (* pitch 2) 1 0)))) "con_str_b3")
+(sdegeo:set-current-contact-set "con_str_b4")
+(sdegeo:define-2d-contact (list (car (find-edge-id (position (* pitch 3) 1 0)))) "con_str_b4")
+(sdegeo:set-current-contact-set "con_str_b5")
+(sdegeo:define-2d-contact (list (car (find-edge-id (position (- (* pitch 4) (/ half_strip_width 2)) 1 0)))) "con_str_b5")
 
 
 
@@ -337,125 +256,12 @@
 (sdedr:define-analytical-profile-placement "AnalyticalProfilePlacement_2" "AnalyticalProfileDefinition_2" "dope_p++" "Both" "NoReplace" "Eval")
 (sdedr:define-erf-profile "AnalyticalProfileDefinition_2" "BoronActiveConcentration" "SymPos" 0.3  "MaxVal" 5e19 "ValueAtDepth" 1e12 "Depth" 1 "Gauss"  "Factor" 0.8)
 
-;(sdedr:define-analytical-profile-placement "AnalyticalProfilePlacement_7" "AnalyticalProfileDefinition_7" "dope_p+_1" "Both" "NoReplace" "Eval")
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_7" "BoronActiveConcentration" "SymPos" 0.01  "MaxVal" 1e+16 "ValueAtDepth" 1e+11 "Depth" 0.5 "Gauss"  "Factor" 0.8)
-;
-;(sdedr:define-analytical-profile-placement "AnalyticalProfilePlacement_10" "AnalyticalProfileDefinition_10" "dope_p+_2" "Both" "NoReplace" "Eval")
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_10" "BoronActiveConcentration" "SymPos" 0.01  "MaxVal" 1e+16 "ValueAtDepth" 1e+11 "Depth" 0.5 "Gauss"  "Factor" 0.8)
-;
-;(sdedr:define-analytical-profile-placement "AnalyticalProfilePlacement_11" "AnalyticalProfileDefinition_11" "dope_p+_3" "Both" "NoReplace" "Eval")
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_11" "BoronActiveConcentration" "SymPos" 0.01  "MaxVal" 1e+16 "ValueAtDepth" 1e+11 "Depth" 0.5 "Gauss"  "Factor" 0.8)
-;
-;(sdedr:define-analytical-profile-placement "AnalyticalProfilePlacement_12" "AnalyticalProfileDefinition_12" "dope_p+_4" "Both" "NoReplace" "Eval")
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_12" "BoronActiveConcentration" "SymPos" 0.01  "MaxVal" 1e+16 "ValueAtDepth" 1e+11 "Depth" 0.5 "Gauss"  "Factor" 0.8)
 
-; n-layer 2
-;				(set! tempstring2 "AnalyticalProfilePlacement_12")
-;				(display tempstring2)
-;				(set! tempstring4 "CG_2_3")
-;				(display tempstring4)
-;(sdedr:define-analytical-profile-placement tempstring2  "AnalyticalProfileDefinition_CGn" tempstring4 "Both" "NoReplace" "Eval")
-;
-;; n-layer 3
-;				(set! tempstring2 "AnalyticalProfilePlacement_13")
-;				(display tempstring2)
-;				(set! tempstring4 "CG_3_3")
-;				(display tempstring4)
-;(sdedr:define-analytical-profile-placement tempstring2  "AnalyticalProfileDefinition_CGn" tempstring4 "Both" "NoReplace" "Eval")
-;
-;; n-layer 4
-;				(set! tempstring2 "AnalyticalProfilePlacement_14")
-;				(display tempstring2)
-;				(set! tempstring4 "CG_4_3")
-;				(display tempstring4)
-;(sdedr:define-analytical-profile-placement tempstring2  "AnalyticalProfileDefinition_CGn" tempstring4 "Both" "NoReplace" "Eval")
-;
-;; n-layer 5
-;				(set! tempstring2 "AnalyticalProfilePlacement_15")
-;				(display tempstring2)
-;				(set! tempstring4 "CG_5_3")
-;				(display tempstring4)
-;(sdedr:define-analytical-profile-placement tempstring2  "AnalyticalProfileDefinition_CGn" tempstring4 "Both" "NoReplace" "Eval")
-;
-;
-;;layer 2 - 5
-;(display "profiles for lay2-5")
-;(do ((j 2 (+ j 1))) ((> j nlayers))
-;	(begin
-;		(do ((i 1 (+ i 1))) ((> i nimps))
-;			(begin
-;				(display i)
-;				(set! tempstring1 "AnalyticalProfilePlacement_")
-;				(set! tempstring2 (string-append tempstring1 (number->string j)))
-;				(set! tempstring2 (string-append tempstring2 (number->string i)))
-;				(display tempstring2)
-;				(set! tempstring3 "CG_")
-;				(set! tempstring4 (string-append tempstring3 (number->string j)))
-;				(set! tempstring3 (string-append tempstring4 "_"))
-;				(set! tempstring4 (string-append tempstring3 (number->string i)))
-;				(display tempstring4)
-;				(set! tempstring5 "AnalyticalProfileDefinition_CG")
-;				(set! tempstring6 (string-append tempstring5 (number->string j)))
-;				(display tempstring6)
-;				(sdedr:define-analytical-profile-placement tempstring2  tempstring6 tempstring4 "Both" "NoReplace" "Eval")
-;			
-;			)
-;		)
-;	)
-;)
-;
-;
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_CG2" "BoronActiveConcentration" "SymPos" 0  "MaxVal" (* 1.1 imp_concentration) "ValueAtDepth" (/ imp_concentration 100) "Depth" 1 "Gauss"  "Factor" 0.8)
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_CG3" "BoronActiveConcentration" "SymPos" 0  "MaxVal" (* 1.   imp_concentration) "ValueAtDepth" (/ imp_concentration 100) "Depth" 1 "Gauss"  "Factor" 0.8)
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_CG4" "BoronActiveConcentration" "SymPos" 0  "MaxVal" (* 0.75 imp_concentration) "ValueAtDepth" (/ imp_concentration 100) "Depth" 1 "Gauss"  "Factor" 0.8)
-;;(sdedr:define-erf-profile "AnalyticalProfileDefinition_CG5" "BoronActiveConcentration" "SymPos" 0  "MaxVal" (* 0.66  imp_concentration) "ValueAtDepth" (/ imp_concentration 100) "Depth" 1 "Gauss"  "Factor" 0.8)
-;
-;(sdedr:define-erf-profile "AnalyticalProfileDefinition_CGn" "PhosphorusActiveConcentration" "SymPos" 0  "MaxVal" (* .05  imp_concentration) "ValueAtDepth" (/ imp_concentration 100) "Depth" 1 "Gauss"  "Factor" 0.8)
-;;(sdedr:define-erf-profile "AnalyticalProfileDefinition_CGn" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" (* 0.5  imp_concentration) "ValueAtDepth" (/ imp_concentration 100) "Depth" 1 "Gauss"  "Factor" 0.8)
 ;
 ;;;#----------Refinement Placement
 (sdedr:define-refinement-size "RefinementDefinition_1" 2 2 0.01 0.01)
 (sdedr:define-refinement-material "RefinementPlacement_1" "RefinementDefinition_1" "Silicon" )
 (sdedr:define-refinement-function "RefinementDefinition_1" "DopingConcentration" "MaxTransDiff" 0.01)
-
-;;(sdedr:define-refeval-window "drift" "Rectangle" (position 0  100 0) (position width_sensor_total (+ thick_sensor_total 1) 0))
-;(sdedr:define-refinement-size "RefinementDefinition_2" 5 5 0.1 0.1)
-;(sdedr:define-refinement-placement "Refinement_Drift" "RefinementDefinition_2" "drift")
-;(sdedr:define-refeval-window "drift_2" "Rectangle" (position 0  20 0) (position  width_sensor_total 70 0))
-;(sdedr:define-refinement-placement "Refinement_Drift_2" "RefinementDefinition_2" "drift_2")
-
-
-;(sdedr:define-refeval-window "impact_close" "Rectangle" (position 14  2 0) (position  24  (+ thick_sensor_total 3) 0))
-;(sdedr:define-refinement-size "RefinementDefinition_3" 1 0.01 1 0.01)
-;(sdedr:define-refinement-placement "Refinement_Impact_close" "RefinementDefinition_3" "impact_close")
-
-;(sdedr:define-refeval-window "deep_implant_region" "Rectangle" (position 0  50 0) (position   width_sensor_total 150 0))
-;(sdedr:define-refinement-size "RefinementDefinition_4" 5 5 0.1 0.1)
-;(sdedr:define-refinement-placement "Refinement_Implant_region" "RefinementDefinition_4" "deep_implant_region")
-
-
-;;(sdedr:define-refinement-size "RefinementDefinition_1" 1 0.01 1 0.01)
-;;(sdedr:define-refinement-material "RefinementPlacement_1" "RefinementDefinition_1" "Silicon" )
-;;(sdedr:define-refinement-function "RefinementDefinition_1" "DopingConcentration" "MaxTransDiff" 1)
-
-;;(sdedr:define-refeval-window "drift" "Rectangle" (position 0  100 0) (position width_sensor_total (+ thick_sensor_total 1) 0))
-;;(sdedr:define-refinement-size "RefinementDefinition_2" 1 0.01 1 0.01)
-;;(sdedr:define-refinement-placement "Refinement_Drift" "RefinementDefinition_2" "drift")
-;;(sdedr:define-refeval-window "drift_2" "Rectangle" (position 0  5 0) (position  width_sensor_total 50 0))
-;;(sdedr:define-refinement-placement "Refinement_Drift_2" "RefinementDefinition_2" "drift_2")
-
-
-;;(sdedr:define-refeval-window "deep_implant_region" "Rectangle" (position 0  50 0) (position   width_sensor_total 150 0))
-;;(sdedr:define-refinement-size "RefinementDefinition_4" 1 0.01 1 0.01)
-;;(sdedr:define-refinement-placement "Refinement_Implant_region" "RefinementDefinition_4" "deep_implant_region")
-
-
-;(sdedr:define-refeval-window "surf_implant_region" "Rectangle" (position 0  0 0) (position  width_sensor_total  2 0))
-;(sdedr:define-refinement-size "RefinementDefinition_5" 0.5 0.1 0.01 0.01)
-;(sdedr:define-refinement-placement "Refinement_Implant_region" "RefinementDefinition_5" "surf_implant_region")
-;(sdedr:define-refinement-function "surf_implant_region" "DopingConcentration" "MaxTransDiff" 0.75)
-;(sdedr:define-refinement-function "surf_implant_region" "MaxLenInt" "Silicon" "Oxide" 0.001 1.4)
-
 
 ; Build Mesh 
 ;(sde:build-mesh "snmesh" " " "test")
